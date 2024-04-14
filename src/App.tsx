@@ -1,4 +1,3 @@
-import { FormEvent } from "react";
 import { TaskForm } from "./components/TaskForm";
 import { TaskCounter } from "./components/TaskCounter";
 import { TaskList } from "./components/TaskList";
@@ -13,13 +12,13 @@ export default function App() {
 
 	console.log(tasks);
 
-	function handleCreateTask(event: FormEvent<HTMLFormElement>) {}
+	function handleCreateTask() {}
 
-	function handleSetNewTask(name: string) {}
+	function handleSetNewTask() {}
 
-	function handleToggleTask(taskId: string) {}
+	function handleToggleTask() {}
 
-	function handleDeleteTask(taskId: string) {}
+	function handleDeleteTask() {}
 
 	function taskCounter() {
 		if (tasks) {
