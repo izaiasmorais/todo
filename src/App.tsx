@@ -19,7 +19,6 @@ export default function App() {
 	const {
 		data: result,
 		isLoading: isLoadingTasks,
-		error: tasksError,
 	} = useQuery({
 		queryKey: ["tasks"],
 		queryFn: () => getTasks()
