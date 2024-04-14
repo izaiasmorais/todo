@@ -1,9 +1,10 @@
-import { Circle, CircleCheckBig, Trash } from "lucide-react";
+import { Circle, CircleCheckBig,  Trash } from "lucide-react";
 import { ITask } from "../@types/task";
 import { EmptyTaskList } from "./EmptyTaskList";
 
 interface TaskListProps {
-	tasks: ITask[];
+	tasks: ITask[] | undefined;
+	isLoadingTasks: boolean;
 	handleToggleTask: (taskId: string) => void;
 	handleDeleteTask: (taskId: string) => void;
 }
@@ -12,10 +13,17 @@ export function TaskList({
 	tasks,
 	handleDeleteTask,
 	handleToggleTask,
+	isLoadingTasks,
 }: TaskListProps) {
 	return (
 		<div className="border-t border-zinc-600 text-white w-[700px] mt-6 rounded-lg">
-			{tasks && tasks.length > 0 && (
+			{isLoadingTasks && (
+				<div className="w-full flex items-center justify-center h-[100px]">
+					Carregando tasks...
+				</div>
+			)}
+
+			{!isLoadingTasks && tasks && tasks.length > 0 && (
 				<div className="flex flex-col gap-4">
 					{tasks.map((task) => {
 						return (
@@ -56,7 +64,7 @@ export function TaskList({
 				</div>
 			)}
 
-			{tasks && tasks.length === 0 && <EmptyTaskList />}
+			{!isLoadingTasks && tasks && tasks.length === 0 && <EmptyTaskList />}
 		</div>
 	);
 }

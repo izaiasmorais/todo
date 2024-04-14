@@ -5,6 +5,8 @@ import { TaskCounter } from "./components/TaskCounter";
 import { TaskList } from "./components/TaskList";
 import { ITask } from "./@types/task";
 import { v4 as uuidv4 } from "uuid";
+import { getTasks } from "./api/get-tasks";
+import { useQuery } from "@tanstack/react-query";
 
 export default function App() {
 	const [tasks, setTasks] = useState<ITask[]>([]);
@@ -13,6 +15,17 @@ export default function App() {
 		name: "",
 		isDone: false,
 	});
+
+	const {
+		data: result,
+		isLoading: isLoadingTasks,
+		error: tasksError,
+	} = useQuery({
+		queryKey: ["tasks"],
+		queryFn: () => getTasks()
+	});
+
+	console.log(result);
 
 	function handleCreateTask(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
@@ -81,7 +94,8 @@ export default function App() {
 				<TaskCounter taskCounter={taskCounter} />
 
 				<TaskList
-					tasks={tasks}
+					tasks={result}
+					isLoadingTasks={isLoadingTasks}
 					handleToggleTask={handleToggleTask}
 					handleDeleteTask={handleDeleteTask}
 				/>

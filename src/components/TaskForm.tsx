@@ -1,5 +1,6 @@
 import { CirclePlus } from "lucide-react";
 import { FormEvent } from "react";
+import { getTasks } from "../api/get-tasks";
 
 interface TaskFormProps {
 	newTaskName: string;
