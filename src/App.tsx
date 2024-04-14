@@ -1,80 +1,41 @@
-import { useState } from "react";
 import { FormEvent } from "react";
 import { TaskForm } from "./components/TaskForm";
 import { TaskCounter } from "./components/TaskCounter";
 import { TaskList } from "./components/TaskList";
-import { ITask } from "./@types/task";
-import { v4 as uuidv4 } from "uuid";
 import { getTasks } from "./api/get-tasks";
 import { useQuery } from "@tanstack/react-query";
 
 export default function App() {
-	const [tasks, setTasks] = useState<ITask[]>([]);
-	const [newTask, setNewTask] = useState<ITask>({
-		id: "",
-		name: "",
-		isDone: false,
-	});
-
-	const {
-		data: result,
-		isLoading: isLoadingTasks,
-	} = useQuery({
+	const { data: tasks, isLoading: isLoadingTasks } = useQuery({
 		queryKey: ["tasks"],
-		queryFn: () => getTasks()
+		queryFn: () => getTasks(),
 	});
 
-	console.log(result);
+	console.log(tasks);
 
-	function handleCreateTask(event: FormEvent<HTMLFormElement>) {
-		event.preventDefault();
+	function handleCreateTask(event: FormEvent<HTMLFormElement>) {}
 
-		setTasks((prev) => [...prev, newTask]);
+	function handleSetNewTask(name: string) {}
 
-		setNewTask({
-			id: "",
-			name: "",
-			isDone: false,
-		});
-	}
+	function handleToggleTask(taskId: string) {}
 
-	function handleSetNewTask(name: string) {
-		setNewTask({
-			id: uuidv4(),
-			name,
-			isDone: false,
-		});
-	}
-
-	function handleToggleTask(taskId: string) {
-		const updatedTasks = tasks.map((task) => {
-			if (task.id === taskId) {
-				return {
-					...task,
-					isDone: !task.isDone,
-				};
-			}
-
-			return task;
-		});
-
-		setTasks(updatedTasks);
-	}
-
-	function handleDeleteTask(taskId: string) {
-		const updatedTasks = tasks.filter((task) => task.id !== taskId);
-
-		setTasks(updatedTasks);
-	}
+	function handleDeleteTask(taskId: string) {}
 
 	function taskCounter() {
-		const totalTasks = tasks.length;
-		const totalDoneTasks = tasks.filter((task) => task.isDone).length;
+		if (tasks) {
+			const totalTasks = tasks.length;
+			const totalDoneTasks = tasks.filter((task) => task.isDone).length;
 
-		return {
-			totalTasks,
-			doneTasks: totalDoneTasks,
-		};
+			return {
+				totalTasks,
+				doneTasks: totalDoneTasks,
+			};
+		} else {
+			return {
+				totalTasks: 0,
+				doneTasks: 0,
+			};
+		}
 	}
 
 	return (
@@ -85,7 +46,7 @@ export default function App() {
 
 			<div className="w-full flex flex-col items-center justify-center">
 				<TaskForm
-					newTaskName={newTask.name}
+					newTaskName={""}
 					handleCreateTask={handleCreateTask}
 					handleSetNewTask={handleSetNewTask}
 				/>
@@ -93,7 +54,7 @@ export default function App() {
 				<TaskCounter taskCounter={taskCounter} />
 
 				<TaskList
-					tasks={result}
+					tasks={tasks}
 					isLoadingTasks={isLoadingTasks}
 					handleToggleTask={handleToggleTask}
 					handleDeleteTask={handleDeleteTask}
