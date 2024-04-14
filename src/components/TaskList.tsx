@@ -1,4 +1,4 @@
-import { Circle, CircleCheckBig,  Trash } from "lucide-react";
+import { Circle, CircleCheckBig, Trash } from "lucide-react";
 import { ITask } from "../@types/task";
 import { EmptyTaskList } from "./EmptyTaskList";
 
@@ -11,8 +11,7 @@ interface TaskListProps {
 
 export function TaskList({
 	tasks,
-	handleDeleteTask,
-	handleToggleTask,
+
 	isLoadingTasks,
 }: TaskListProps) {
 	return (
@@ -33,10 +32,7 @@ export function TaskList({
 								transition-colors duration-200 justify-between"
 							>
 								<div className="flex gap-2">
-									<div
-										className="w-6 h-6"
-										onClick={() => handleToggleTask(task.id)}
-									>
+									<div className="w-6 h-6">
 										{task.isDone === true && (
 											<CircleCheckBig className="text-purple-500 cursor-pointer" />
 										)}
@@ -49,10 +45,7 @@ export function TaskList({
 									<span className="text-gray-300">{task.name}</span>
 								</div>
 
-								<div
-									className="w-6 h-6"
-									onClick={() => handleDeleteTask(task.id)}
-								>
+								<div className="w-6 h-6">
 									<Trash
 										className="text-zinc-500 hover:text-red-500 transition-colors cursor-pointer
 								duration-300"
