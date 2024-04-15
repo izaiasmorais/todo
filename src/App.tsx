@@ -1,24 +1,67 @@
+import { useState } from "react";
 import { TaskForm } from "./components/TaskForm";
 import { TaskCounter } from "./components/TaskCounter";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { TaskList } from "./components/TaskList";
 import { getTasks } from "./api/get-tasks";
-import { useQuery } from "@tanstack/react-query";
+import { deleteTask } from "./api/delete-task";
+import { toggleTask } from "./api/toggle-task";
+import { createTask } from "./api/create-task";
+import { toast } from "sonner";
 
 export default function App() {
+	const [newTask, setNewTask] = useState("");
+	const queryClient = useQueryClient();
 	const { data: tasks, isLoading: isLoadingTasks } = useQuery({
 		queryKey: ["tasks"],
 		queryFn: () => getTasks(),
 	});
 
-	console.log(tasks);
+	const { mutateAsync: createTaskFn } = useMutation({
+		mutationFn: createTask,
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["tasks"] });
+		},
+	});
 
-	function handleCreateTask() {}
+	const { mutateAsync: deleteTaskFn } = useMutation({
+		mutationFn: deleteTask,
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["tasks"] });
+		},
+	});
 
-	function handleSetNewTask() {}
+	const { mutateAsync: toggleTaskFn } = useMutation({
+		mutationFn: toggleTask,
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["tasks"] });
+		},
+	});
 
-	function handleToggleTask() {}
+	async function handleCreateTask() {
+		try {
+			await createTaskFn(newTask);
+			toast.success("Tarefa criada com sucesso!");
+		} catch {
+			toast.error("Erro ao criar uma task!");
+		}
+	}
 
-	function handleDeleteTask() {}
+	async function handleToggleTask(taskId: number) {
+		try {
+			await toggleTaskFn(taskId);
+		} catch {
+			toast.error("Erro ao atualizar a task!");
+		}
+	}
+
+	async function handleDeleteTask(taskId: number) {
+		try {
+			await deleteTaskFn(taskId);
+		} catch {
+			toast.error("Erro ao deletar a task!");
+		}
+	}
 
 	function taskCounter() {
 		if (tasks) {
@@ -45,9 +88,9 @@ export default function App() {
 
 			<div className="w-full flex flex-col items-center justify-center">
 				<TaskForm
-					newTaskName={""}
+					newTask={newTask}
 					handleCreateTask={handleCreateTask}
-					handleSetNewTask={handleSetNewTask}
+					setNewTask={setNewTask}
 				/>
 
 				<TaskCounter taskCounter={taskCounter} />

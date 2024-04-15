@@ -2,15 +2,15 @@ import { CirclePlus } from "lucide-react";
 import { FormEvent } from "react";
 
 interface TaskFormProps {
-	newTaskName: string;
+	newTask: string;
 	handleCreateTask: (event: FormEvent<HTMLFormElement>) => void;
-	handleSetNewTask: (name: string) => void;
+	setNewTask: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export function TaskForm({
-	newTaskName,
+	newTask,
 	handleCreateTask,
-	handleSetNewTask,
+	setNewTask,
 }: TaskFormProps) {
 	return (
 		<form
@@ -22,8 +22,8 @@ export function TaskForm({
 				className="p-4 rounded-lg bg-zinc-700 border border-zinc-950 placeholder-gray-300
 						text-gray-300 w-full"
 				placeholder="Adicione uma nova tarefa"
-				value={newTaskName}
-				onChange={(event) => handleSetNewTask(event.target.value)}
+				value={newTask}
+				onChange={(event) => setNewTask(event.target.value)}
 			/>
 
 			<button

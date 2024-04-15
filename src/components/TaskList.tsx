@@ -5,14 +5,15 @@ import { EmptyTaskList } from "./EmptyTaskList";
 interface TaskListProps {
 	tasks: ITask[] | undefined;
 	isLoadingTasks: boolean;
-	handleToggleTask: (taskId: string) => void;
-	handleDeleteTask: (taskId: string) => void;
+	handleToggleTask: (taskId: number) => void;
+	handleDeleteTask: (taskId: number) => void;
 }
 
 export function TaskList({
 	tasks,
-
 	isLoadingTasks,
+	handleDeleteTask,
+	handleToggleTask,
 }: TaskListProps) {
 	return (
 		<div className="border-t border-zinc-600 text-white w-[700px] mt-6 rounded-lg">
@@ -32,7 +33,10 @@ export function TaskList({
 								transition-colors duration-200 justify-between"
 							>
 								<div className="flex gap-2">
-									<div className="w-6 h-6">
+									<div
+										className="w-6 h-6"
+										onClick={() => handleToggleTask(task.id)}
+									>
 										{task.isDone === true && (
 											<CircleCheckBig className="text-purple-500 cursor-pointer" />
 										)}
@@ -45,7 +49,10 @@ export function TaskList({
 									<span className="text-gray-300">{task.name}</span>
 								</div>
 
-								<div className="w-6 h-6">
+								<div
+									className="w-6 h-6"
+									onClick={() => handleDeleteTask(task.id)}
+								>
 									<Trash
 										className="text-zinc-500 hover:text-red-500 transition-colors cursor-pointer
 								duration-300"
