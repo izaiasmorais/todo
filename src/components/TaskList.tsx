@@ -5,8 +5,8 @@ import { EmptyTaskList } from "./EmptyTaskList";
 interface TaskListProps {
 	tasks: ITask[] | undefined;
 	isLoadingTasks: boolean;
-	handleToggleTask: (taskId: number) => void;
-	handleDeleteTask: (taskId: number) => void;
+	handleToggleTask: (taskId: string) => void;
+	handleDeleteTask: (taskId: string) => void;
 }
 
 export function TaskList({

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { TaskForm } from "./components/TaskForm";
 import { TaskCounter } from "./components/TaskCounter";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -38,7 +38,8 @@ export default function App() {
 		},
 	});
 
-	async function handleCreateTask() {
+	async function handleCreateTask(event: FormEvent<HTMLFormElement>) {
+		event.preventDefault();
 		try {
 			await createTaskFn(newTask);
 			toast.success("Tarefa criada com sucesso!");
@@ -47,7 +48,7 @@ export default function App() {
 		}
 	}
 
-	async function handleToggleTask(taskId: number) {
+	async function handleToggleTask(taskId: string) {
 		try {
 			await toggleTaskFn(taskId);
 		} catch {
@@ -55,7 +56,7 @@ export default function App() {
 		}
 	}
 
-	async function handleDeleteTask(taskId: number) {
+	async function handleDeleteTask(taskId: string) {
 		try {
 			await deleteTaskFn(taskId);
 		} catch {
